@@ -8,28 +8,27 @@ function App() {
       active: true,
       currentWindow: true,
     });
+    console.log(tab);
 
-    if (tab.id != undefined) {
-      const result = await chrome.scripting.executeScript({
-        target: { tabId: tab.id },
-        func: () => {
-          let p_Arr = [];
-          const div = document.getElementsByClassName("p-novel__text")[0];
-          const p_texts = div.querySelectorAll("p");
+    const result = await chrome.scripting.executeScript({
+      target: { tabId: tab.id! },
+      func: () => {
+        let p_Arr: (string | null)[] = [];
+        const div = document.getElementsByClassName("p-novel__text")[0];
+        const p_texts = div.querySelectorAll("p");
+        console.log(p_texts);
+        for (let i = 0; i < p_texts.length; i++) {
+          p_Arr[i] = p_texts[i].textContent;
+          p_texts[i].classList.add("highlight");
+          console.log(p_texts[i].textContent);
+        }
 
-          for (let i = 0; i < p_texts.length; i++) {
-            p_Arr[i] = p_texts[i].textContent;
-            p_texts[i].classList.add("highlight");
-            console.log(p_texts[i].textContent);
-          }
+        return p_Arr;
+      },
+    });
 
-          return p_Arr;
-        },
-      });
-      if (result[0].result != undefined) {
-        setText(result[0].result);
-      }
-    }
+    setText(result[0].result!);
+    console.log(text);
   };
 
   return (

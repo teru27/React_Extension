@@ -7,3 +7,10 @@ chrome.action.onClicked.addListener(() => {
     height: 600,
   });
 });
+
+chrome.action.onClicked.addListener((tab) => {
+  chrome.scripting.executeScript({
+    target: { tabId: tab.id! },
+    files: ["src/content.js"],
+  });
+});
