@@ -20,8 +20,12 @@ npm i
 
 ## ビルド方法
 
-npm run build
+npm run build:all
 
 ## 主な機能
 - Web Speech APIでの読み上げ機能
 - VOICEVOXでの読み上げ機能
+
+
+## 作業内容の
+ - https://copilot.microsoft.com/chats/CfGaRPQwwsuMpYKdgMp1T

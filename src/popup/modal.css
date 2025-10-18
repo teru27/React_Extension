@@ -1,0 +1,23 @@
+.react-extension-modal {
+    position: fixed;
+    z-index: 9999;
+    background: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    pointer-events: none;
+    /* 背景はクリック不可 */
+}
+
+.react-extension-modal-header {
+    background: #eee;
+    padding: 8px;
+    cursor: move;
+    pointer-events: auto;
+    /* ヘッダーは操作可能 */
+}
+
+.react-extension-modal-content {
+    padding: 16px;
+    pointer-events: auto;
+    /* コンテンツは操作可能 */
+}

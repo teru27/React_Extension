@@ -8,14 +8,15 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        popup: resolve(__dirname, "popup.html"),
-        modal: resolve(__dirname, "modal.html"),
-        content: resolve(__dirname, "src/content/content.ts"),
+        // popup: resolve(__dirname, "popup.html"),
+        //modal: resolve(__dirname, "modal.html"),
         background: resolve(__dirname, "src/background/background.ts"),
+        modal: resolve(__dirname, "src/popup/modal.css"),
       },
       output: {
         entryFileNames: "src/[name].js",
         chunkFileNames: "assets/[name].js",
+        cssChunkFileNames: "assets/[name].css",
         assetFileNames: "assets/[name].[ext]",
       },
     },
