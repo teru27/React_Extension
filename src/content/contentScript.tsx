@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import ModalView from "../popup/ModalView";
 
@@ -18,5 +19,20 @@ if (!document.getElementById("my-extension-modal-root")) {
     const mountPoint = document.createElement("div");
     shadow.appendChild(mountPoint);
     const root = ReactDOM.createRoot(mountPoint);
-    root.render(<ModalView />);
+
+    function ModalWrapper() {
+        const [visible, setVisible] = useState(false);
+
+        useEffect(() => {
+            chrome.runtime.onMessage.addListener((message) => {
+                if (message.type === "SHOW_MODAL") {
+                    setVisible(true);
+                }
+            });
+        }, []);
+
+        return visible ? <ModalView /> : null;
+    }
+
+    root.render(<ModalWrapper />);
 }
