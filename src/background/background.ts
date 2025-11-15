@@ -8,18 +8,8 @@
 //   });
 // });
 
-//今表示しているサイトに追加する
-// chrome.action.onClicked.addListener((tab) => {
-//   if (!tab.id) return;
-
-//   chrome.scripting.executeScript({
-//     target: { tabId: tab.id! },
-//     files: ["content/contentScript.js"],
-//   });
-// });
-
 chrome.action.onClicked.addListener((tab) => {
   if (!tab.id) return;
 
-  chrome.tabs.sendMessage(tab.id, { type: "SHOW_MODAL" });
+  chrome.tabs.sendMessage(tab.id, { type: "SHOW_MODAL", tabId: tab.id });
 });

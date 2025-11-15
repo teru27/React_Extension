@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
-import ModalView from "../popup/ModalView";
+import { ModalView } from "../popup/ModalView";
 
 // 拡張機能ボタンを押下した際にモーダルを追加する
 if (!document.getElementById("my-extension-modal-root")) {
@@ -22,9 +22,8 @@ if (!document.getElementById("my-extension-modal-root")) {
 
     function ModalWrapper() {
         const [visible, setVisible] = useState(false);
-
         useEffect(() => {
-            chrome.runtime.onMessage.addListener((message) => {
+            chrome.runtime.onMessage.addListener((message: { type: string, tabId: number }) => {
                 if (message.type === "SHOW_MODAL") {
                     setVisible(true);
                 }
@@ -33,6 +32,8 @@ if (!document.getElementById("my-extension-modal-root")) {
 
         return visible ? <ModalView /> : null;
     }
+
+
 
     root.render(<ModalWrapper />);
 }

@@ -8,12 +8,13 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        // popup: resolve(__dirname, "popup.html"),
-        //modal: resolve(__dirname, "modal.html"),
+        // ビルド対象の選択
         background: resolve(__dirname, "src/background/background.ts"),
-        modal: resolve(__dirname, "src/popup/modal.css"),
+        component: resolve(__dirname, "src/background/background.ts"),
+        modal: resolve(__dirname, "src/component/modal.css"),
       },
       output: {
+        // ビルド対象の出力先の指定
         entryFileNames: "src/[name].js",
         chunkFileNames: "assets/[name].js",
         cssChunkFileNames: "assets/[name].css",
