@@ -1,39 +1,19 @@
-import { useState, type FC } from "react";
+import { type FC } from "react";
 
 import { Modal } from "../component/Modal";
-import { VoicevoxCmp } from "../component/voicevoxCmp";
-import { WebSpeechAPI } from "../component/WebSpeechAPICmp";
-import "./modalView.css";
+import { SelectModCmp } from "../component/SelectModCmp";
 
-interface ModalViewProps {}
-
-type mode = "web-api" | "voicevox";
+interface ModalViewProps {
+  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
 export const ModalView: FC<ModalViewProps> = (props) => {
-  const {} = props;
-
-  const [getSelectMode, setSelectMode] = useState<mode>("web-api");
-
-  const changeMode = (selectModo: mode) => {
-    setSelectMode(selectModo);
-  };
+  const { setVisible } = props;
 
   return (
     <>
-      <Modal>
-        {getSelectMode == "web-api" ? (
-          <>
-            <button onClick={() => changeMode("voicevox")}>
-              voicevoxへ変更
-            </button>
-            <WebSpeechAPI />
-          </>
-        ) : (
-          <>
-            <button onClick={() => changeMode("web-api")}>web-apiへ変更</button>
-            <VoicevoxCmp />
-          </>
-        )}
+      <Modal setVisible={setVisible}>
+        <SelectModCmp />
       </Modal>
     </>
   );

@@ -1,5 +1,7 @@
 import { useEffect, useState, type FC } from "react";
+import { Accordion } from "./Accordion";
 import "./modal.css";
+import { Slider } from "./Slider";
 
 interface WebSpeechAPI {}
 
@@ -12,7 +14,7 @@ interface ITextToSpeech {
   voiceName?: string; // 使用する音声の種類
 }
 
-export const WebSpeechAPI: FC<WebSpeechAPI> = (props: any) => {
+export const WebSpeechAPI: FC<WebSpeechAPI> = (props) => {
   const [textDoms, setTextDoms] = useState<HTMLParagraphElement[]>([]);
 
   const [getPitch, setPitch] = useState<number>(2.0);
@@ -103,49 +105,45 @@ export const WebSpeechAPI: FC<WebSpeechAPI> = (props: any) => {
       ) : (
         <button onClick={pause}>停止</button>
       )}
-
-      <div>
-        pitch:{getPitch.toFixed(1)}
-        <input
-          type="range"
-          id="volume"
-          value={getPitch}
-          onChange={(event) => {
-            setPitch(event.target.valueAsNumber);
-          }}
-          min="0.0"
-          max="10"
-          step="0.1"
-        ></input>
-      </div>
-      <div>
-        speed:{getSpeed.toFixed(1)}
-        <input
-          type="range"
-          id="volume"
-          value={getSpeed}
-          onChange={(event) => {
-            setSpeed(event.target.valueAsNumber);
-          }}
-          min="0.0"
-          max="10"
-          step="0.1"
-        ></input>
-      </div>
-      <div>
-        volume:{getVolume.toFixed(1)}
-        <input
-          type="range"
-          id="volume"
-          value={getVolume}
-          onChange={(event) => {
-            setVolume(event.target.valueAsNumber);
-          }}
-          min="0.0"
-          max="10"
-          step="0.1"
-        ></input>
-      </div>
+      <Accordion>
+        <>
+          <Slider
+            min={"0.0"}
+            max={"10"}
+            step={"0.1"}
+            value={getPitch}
+            setValue={setPitch}
+          />
+        </>
+        <div>
+          speed:{getSpeed.toFixed(1)}
+          <input
+            type="range"
+            id="volume"
+            value={getSpeed}
+            onChange={(event) => {
+              setSpeed(event.target.valueAsNumber);
+            }}
+            min="0.0"
+            max="10"
+            step="0.1"
+          ></input>
+        </div>
+        <div>
+          volume:{getVolume.toFixed(1)}
+          <input
+            type="range"
+            id="volume"
+            value={getVolume}
+            onChange={(event) => {
+              setVolume(event.target.valueAsNumber);
+            }}
+            min="0.0"
+            max="10"
+            step="0.1"
+          ></input>
+        </div>
+      </Accordion>
     </div>
   );
 };

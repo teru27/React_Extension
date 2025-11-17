@@ -3,10 +3,11 @@ import "./modal.css";
 
 interface ModalType {
   children: ReactNode;
+  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const Modal: FC<ModalType> = (props: any) => {
-  const { children } = props;
+  const { children, setVisible } = props;
 
   const modalRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ x: 100, y: 100 });
@@ -46,10 +47,13 @@ export const Modal: FC<ModalType> = (props: any) => {
       className="modal"
       style={{ left: `${position.x}px`, top: `${position.y}px` }}
     >
-      <div className="modal-header" onMouseDown={onMouseDown}>
-        <strong>ドラッグで移動</strong>
+      <div className="modal-header" onMouseDown={onMouseDown}></div>
+      <div className="modal-content">
+        <button className="close-btn" onClick={() => setVisible(false)}>
+          ✕
+        </button>
+        {children}
       </div>
-      <div className="modal-content">{children}</div>
     </div>
   );
 };

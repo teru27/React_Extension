@@ -10,14 +10,58 @@
 
 .modal-header {
   background: #eee;
-  padding: 8px;
+  padding: 14px;
   cursor: move;
   pointer-events: auto;
   /* ヘッダーは操作可能 */
 }
 
 .modal-content {
-  padding: 16px;
+  padding: 8px;
   pointer-events: auto;
   /* コンテンツは操作可能 */
+  width: 300px;
+  height: auto;
+}
+
+.close-btn {
+  cursor: pointer;
+  border: none;
+  font-size: 18px;
+  position: absolute;
+  top: 3px;
+  right: 0px;
+}
+
+.select-mode {
+  text-align: right;
+}
+
+/* アコーディオン */
+.accordion {
+  width: 100%;
+  max-width: 400px;
+  margin: 1rem auto;
+  font-family: sans-serif;
+}
+
+.accordion-header {
+  cursor: pointer;
+  border: none;
+  border-radius: 6px;
+  font-size: 18px;
+}
+
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition:
+    max-height 0.3s ease,
+    padding 0.3s ease;
+  border-radius: 6px;
+  padding: 0 12px;
+}
+
+.accordion-content.open {
+  max-height: 200px;
 }
