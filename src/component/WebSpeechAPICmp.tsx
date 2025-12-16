@@ -15,11 +15,11 @@ interface ITextToSpeech {
 }
 
 export const WebSpeechAPI: FC<WebSpeechAPI> = (props) => {
+  const SCALE = 10;
   const [textDoms, setTextDoms] = useState<HTMLParagraphElement[]>([]);
-
-  const [getPitch, setPitch] = useState<number>(2.0);
-  const [getSpeed, setSpeed] = useState<number>(2.0);
-  const [getVolume, setVolume] = useState<number>(1.0);
+  const [getPitch, setPitch] = useState<number>(20);
+  const [getSpeed, setSpeed] = useState<number>(20);
+  const [getVolume, setVolume] = useState<number>(10);
   const [get, set] = useState<boolean>(false);
 
   const handleClick = async () => {
@@ -29,8 +29,6 @@ export const WebSpeechAPI: FC<WebSpeechAPI> = (props) => {
     const p_texts = div.querySelectorAll("p");
     const textArr: HTMLParagraphElement[] = [];
     for (let i = 0; i < p_texts.length; i++) {
-      // textDom.classList.add("highlight");
-      // textDom.classList.remove("highlight")
       const textDom = p_texts[i];
       textArr.push(textDom);
     }
@@ -66,17 +64,22 @@ export const WebSpeechAPI: FC<WebSpeechAPI> = (props) => {
 
       // 読み上げ終了後に次のステップを呼び出す
       utterance.onend = () => {
+        console.log("end");
+        //textDoms[index].classList.remove("highlight");
         trampoline(nextStep());
       };
-      utterance.rate = speed;
-      utterance.pitch = pitch;
-      utterance.volume = volume;
+      console.log("start:" + textDoms[index].textContent);
+      //textDoms[index].classList.add("highlight");
+      utterance.rate = speed / SCALE;
+      utterance.pitch = pitch / SCALE;
+      utterance.volume = volume / SCALE;
       speechSynthesis.speak(utterance);
       speechSynthesis.resume();
       // 読み上げ中は次のステップを返さない（onendで呼ぶ）
       return null;
     };
   }
+
   const pause = () => {
     if (textDoms.length > 0) {
       speechSynthesis.pause();
@@ -92,13 +95,12 @@ export const WebSpeechAPI: FC<WebSpeechAPI> = (props) => {
   };
 
   useEffect(() => {
-    console.log(textDoms);
     trampoline(speakThunk(0, getSpeed, getPitch, getVolume));
   }, [textDoms]);
 
   return (
     <div>
-      <button onClick={handleClick}>取得する</button>
+      <button onClick={handleClick}>取得し再生</button>
 
       {get ? (
         <button onClick={resume}>再生</button>
@@ -108,41 +110,27 @@ export const WebSpeechAPI: FC<WebSpeechAPI> = (props) => {
       <Accordion>
         <>
           <Slider
-            min={"0.0"}
-            max={"10"}
-            step={"0.1"}
+            min={"0"}
+            max={"100"}
+            step={1}
             value={getPitch}
             setValue={setPitch}
           />
-        </>
-        <div>
-          speed:{getSpeed.toFixed(1)}
-          <input
-            type="range"
-            id="volume"
+          <Slider
+            min={"0"}
+            max={"100"}
+            step={1}
             value={getSpeed}
-            onChange={(event) => {
-              setSpeed(event.target.valueAsNumber);
-            }}
-            min="0.0"
-            max="10"
-            step="0.1"
-          ></input>
-        </div>
-        <div>
-          volume:{getVolume.toFixed(1)}
-          <input
-            type="range"
-            id="volume"
+            setValue={setSpeed}
+          />
+          <Slider
+            min={"0"}
+            max={"100"}
+            step={1}
             value={getVolume}
-            onChange={(event) => {
-              setVolume(event.target.valueAsNumber);
-            }}
-            min="0.0"
-            max="10"
-            step="0.1"
-          ></input>
-        </div>
+            setValue={setVolume}
+          />
+        </>
       </Accordion>
     </div>
   );

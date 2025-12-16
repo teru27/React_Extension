@@ -1,3 +1,7 @@
+.highlight {
+  background-color: yellow;
+}
+
 .modal {
   position: fixed;
   z-index: 9999;
@@ -20,7 +24,8 @@
   padding: 8px;
   pointer-events: auto;
   /* コンテンツは操作可能 */
-  width: 300px;
+  min-width: 350px;
+  width: auto;
   height: auto;
 }
 
@@ -64,4 +69,34 @@
 
 .accordion-content.open {
   max-height: 200px;
+}
+
+/* スライダー */
+
+.slider-main {
+  display: flex;
+  align-items: center;
+}
+
+.slider-label {
+  width: 80px;
+}
+
+.slider-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.slider-btn {
+  width: 18px;
+  height: 18px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slider {
+  height: 18px;
 }
