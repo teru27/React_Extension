@@ -2,10 +2,11 @@ import { useEffect, useState, type FC } from "react";
 import { Accordion } from "./Accordion";
 import "./modal.css";
 import { Slider } from "./Slider";
+import { getMainText } from "./util";
 
 interface WebSpeechAPI {}
 
-interface ITextToSpeech {
+interface TextToSpeech {
   text: string;
   lang: "en-US" | "ja-JP"; // ISO 639-1コードの形式
   speed: number; // 範囲: 0.1 ~ 10
@@ -14,29 +15,24 @@ interface ITextToSpeech {
   voiceName?: string; // 使用する音声の種類
 }
 
+const SCALE = 10;
+
 export const WebSpeechAPI: FC<WebSpeechAPI> = (props) => {
-  const SCALE = 10;
+  const {} = props;
   const [textDoms, setTextDoms] = useState<HTMLParagraphElement[]>([]);
   const [getPitch, setPitch] = useState<number>(20);
   const [getSpeed, setSpeed] = useState<number>(20);
   const [getVolume, setVolume] = useState<number>(10);
-  const [get, set] = useState<boolean>(false);
+  const [getNowPlay, setNowPlay] = useState<boolean>(false);
 
-  const handleClick = async () => {
-    if (!document.getElementsByClassName("p-novel__text")) return;
-
-    const div = document.getElementsByClassName("p-novel__text")[0];
-    const p_texts = div.querySelectorAll("p");
-    const textArr: HTMLParagraphElement[] = [];
-    for (let i = 0; i < p_texts.length; i++) {
-      const textDom = p_texts[i];
-      textArr.push(textDom);
-    }
+  const handleClick = () => {
+    const textArr = getMainText();
     setTextDoms(textArr);
   };
 
   // トランポリン関数（関数を繰り返し呼び出す）
   function trampoline(fn: (() => null) | null) {
+    console.log("start:trampoline");
     while (typeof fn === "function") {
       fn = fn();
     }
@@ -70,11 +66,12 @@ export const WebSpeechAPI: FC<WebSpeechAPI> = (props) => {
       };
       console.log("start:" + textDoms[index].textContent);
       //textDoms[index].classList.add("highlight");
+      utterance.lang = "ja-JP";
       utterance.rate = speed / SCALE;
       utterance.pitch = pitch / SCALE;
       utterance.volume = volume / SCALE;
       speechSynthesis.speak(utterance);
-      speechSynthesis.resume();
+      //speechSynthesis.resume();
       // 読み上げ中は次のステップを返さない（onendで呼ぶ）
       return null;
     };
@@ -83,26 +80,29 @@ export const WebSpeechAPI: FC<WebSpeechAPI> = (props) => {
   const pause = () => {
     if (textDoms.length > 0) {
       speechSynthesis.pause();
-      set(true);
+      setNowPlay(true);
     }
   };
 
   const resume = () => {
     if (textDoms.length > 0) {
       speechSynthesis.resume();
-      set(false);
+      setNowPlay(false);
     }
   };
 
   useEffect(() => {
-    trampoline(speakThunk(0, getSpeed, getPitch, getVolume));
+    if (textDoms.length) {
+      console.log("start:useEffect");
+      trampoline(speakThunk(0, getSpeed, getPitch, getVolume));
+    }
   }, [textDoms]);
 
   return (
     <div>
       <button onClick={handleClick}>取得し再生</button>
 
-      {get ? (
+      {getNowPlay ? (
         <button onClick={resume}>再生</button>
       ) : (
         <button onClick={pause}>停止</button>

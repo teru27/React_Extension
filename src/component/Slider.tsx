@@ -1,4 +1,4 @@
-import { useEffect, type FC } from "react";
+import { type FC } from "react";
 
 import "./modal.css";
 
@@ -13,9 +13,6 @@ interface SliderProps {
 export const Slider: FC<SliderProps> = (props) => {
   const { min, max, step, value, setValue } = props;
 
-  useEffect(() => {
-    console.log(value);
-  }, [value]);
   return (
     <div className="slider-main">
       <div className="slider-container">
