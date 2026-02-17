@@ -113,17 +113,13 @@ export const VoicevoxCmp: FC<voicevoxCmpType> = (props) => {
 
   return (
     <>
-      <button className="btn-execute" onClick={handleClick}>
-        ▶ 取得して再生
-      </button>
-
-      <button
-        className="btn-secondary"
-        onClick={playVoice(0)}
-        disabled={loading}
-      >
-        {loading ? "生成中…" : "再生"}
-      </button>
+      {loading ? (
+        <button className="btn-execute">■ 停止</button>
+      ) : (
+        <button className="btn-execute" onClick={handleClick}>
+          ▶ 取得して再生
+        </button>
+      )}
       <Accordion>
         <div className="setting-item">
           <label className="slider-label">キャラクター選択</label>
