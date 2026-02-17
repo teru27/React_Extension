@@ -1,102 +1,259 @@
+/* 読み上げ中の文字の背景色 */
 .highlight {
   background-color: yellow;
 }
 
+/* 変数の定義 - 色彩設計 */
+:root {
+  --primary-color: #007aff;
+  --primary-hover: #0056b3;
+  --bg-color: #ffffff;
+  --header-bg: #f8f9fa;
+  --text-main: #333333;
+  --text-muted: #888888;
+  --border-color: #eeeeee;
+  --shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  --radius: 12px;
+}
+
+/* モーダル本体 */
 .modal {
   position: fixed;
   z-index: 9999;
-  background: white;
-  border: 1px solid #ccc;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  pointer-events: none;
-  /* 背景はクリック不可 */
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 .modal-header {
-  background: #eee;
-  padding: 14px;
+  background: var(--header-bg);
+  padding: 12px 16px;
   cursor: move;
-  pointer-events: auto;
-  /* ヘッダーは操作可能 */
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  height: 20px;
+}
+
+/* ヘッダーにタイトルを追加する場合のスタイル */
+.modal-header::before {
+  font-size: 12px;
+  font-weight: bold;
+  color: var(--text-muted);
 }
 
 .modal-content {
-  padding: 8px;
-  pointer-events: auto;
-  /* コンテンツは操作可能 */
-  min-width: 350px;
-  width: auto;
-  height: auto;
+  padding: 20px;
+  min-width: 320px;
 }
 
+/* 閉じるボタン */
 .close-btn {
   cursor: pointer;
   border: none;
+  background: transparent;
   font-size: 18px;
+  color: var(--text-muted);
   position: absolute;
-  top: 3px;
-  right: 0px;
+  top: 10px;
+  right: 12px;
+  transition: color 0.2s;
+}
+.close-btn:hover {
+  color: #ff3b30;
 }
 
+/* モード切替セレクトボックス */
 .select-mode {
-  text-align: right;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: flex-end;
 }
 
-/* アコーディオン */
+.select-mode select {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  background: #fff;
+  font-size: 13px;
+  color: var(--text-main);
+  outline: none;
+}
+
+/* ボタン共通設定 */
+button {
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+/* メインのアクションボタン（取得し再生） */
+.btn-execute {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  width: 100%;
+  margin-bottom: 8px;
+}
+.btn-execute:hover {
+  background: var(--primary-hover);
+}
+
+/* 停止・一時停止ボタン */
+.btn-secondary {
+  background: #f0f0f0;
+  color: var(--text-main);
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  width: 100%;
+}
+.btn-secondary:hover {
+  background: #e5e5e5;
+}
+
+/* アコーディオンの外枠と境界線 */
 .accordion {
   width: 100%;
-  max-width: 400px;
-  margin: 1rem auto;
-  font-family: sans-serif;
+  margin-top: 12px;
+  border-top: 1px solid #eee; /* ボタンの下に線を引く */
 }
 
-.accordion-header {
+/* ヘッダー部分をクリッカブルな帯にする */
+.accordion-header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 4px;
   cursor: pointer;
-  border: none;
-  border-radius: 6px;
-  font-size: 18px;
+  transition: background 0.2s;
+  color: #666;
+}
+
+.accordion-header-container:hover {
+  background: #f9f9f9;
+}
+
+.accordion-title {
+  font-size: 11px;
+  font-weight: bold;
+  color: #888;
+}
+
+/* 開閉アニメーションのコア設定 */
+.accordion-container {
+  display: grid;
+  grid-template-rows: 0fr; /* 閉じている時は 0 */
+  transition: grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.accordion-container.open {
+  grid-template-rows: 1fr; /* 開くと中身の高さ（1 fraction）になる */
 }
 
 .accordion-content {
-  max-height: 0;
-  overflow: hidden;
-  transition:
-    max-height 0.3s ease,
-    padding 0.3s ease;
-  border-radius: 6px;
-  padding: 0 12px;
+  min-height: 0; /* gridアニメーションを動作させるために必要 */
 }
 
-.accordion-content.open {
-  max-height: 200px;
+/* コンテンツの内側余白 */
+.accordion-inner {
+  padding: 8px 0 16px 0;
+}
+
+/* アイコンのスタイル */
+.accordion-icon {
+  font-size: 10px;
+  color: #ccc;
+  transition: color 0.2s;
+}
+
+.accordion-header-container.is-open .accordion-icon {
+  color: #007aff; /* 開いている時は青くする */
 }
 
 /* スライダー */
-
 .slider-main {
-  display: flex;
-  align-items: center;
-}
-
-.slider-label {
-  width: 80px;
+  margin: 12px 0;
 }
 
 .slider-container {
-  display: flex;
+  display: grid;
+  grid-template-columns: 70px 1fr auto;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+}
+
+.slider-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.slider {
+  accent-color: var(--primary-color);
+  cursor: pointer;
+}
+
+.slider-btn-group {
+  display: flex;
+  gap: 4px;
 }
 
 .slider-btn {
-  width: 18px;
-  height: 18px;
-  line-height: 1;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  border: 1px solid #eee;
+  background: white;
+  font-size: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.slider {
-  height: 18px;
+/* 設定アイテムのレイアウト */
+.setting-item {
+  margin-bottom: 12px;
+}
+
+.setting-item label {
+  display: block;
+  font-size: 11px;
+  color: #888;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+/* セレクトボックスの装飾 */
+.custom-select {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background: #fff;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.custom-select:focus {
+  border-color: #007aff;
+}
+
+/* optgroup（キャラクター名）のスタイル（ブラウザに依存しますが少し太く） */
+optgroup {
+  font-weight: bold;
+  font-style: normal;
+  color: #666;
 }

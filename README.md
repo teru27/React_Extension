@@ -1,12 +1,13 @@
 ## 概要
+
 　小説家になろうのテキストを再生するchromeの拡張機能です。
 
 ## バージョン
 
- - node 22
- - react 19.1.1
- - TypeScript 5.9.3
- - vite 7.1.14
+- node 22
+- react 19.1.1
+- TypeScript 5.9.3
+- vite 7.1.14
 
 ## 構成
 
@@ -23,9 +24,10 @@ npm i
 npm run build:all
 
 ## 主な機能
+
 - Web Speech APIでの読み上げ機能
 - VOICEVOXでの読み上げ機能
 
-
 ## 作業内容の
- - https://copilot.microsoft.com/chats/CfGaRPQwwsuMpYKdgMp1T
+
+- https://copilot.microsoft.com/chats/CfGaRPQwwsuMpYKdgMp1T

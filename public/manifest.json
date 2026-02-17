@@ -8,11 +8,7 @@
     "service_worker": "src/background.js",
     "type": "module"
   },
-  "permissions": [
-    "scripting",
-    "activeTab",
-    "tabs"
-  ],
+  "permissions": ["scripting", "activeTab", "tabs", "tts"],
   "host_permissions": [
     "https://example.com/*",
     "https://*.example.com/*",
@@ -20,22 +16,14 @@
   ],
   "content_scripts": [
     {
-      "matches": [
-        "<all_urls>"
-      ],
-      "js": [
-        "content/contentScript.js"
-      ]
+      "matches": ["<all_urls>"],
+      "js": ["content/contentScript.js"]
     }
   ],
   "web_accessible_resources": [
     {
-      "resources": [
-        "assets/modal.css"
-      ],
-      "matches": [
-        "<all_urls>"
-      ]
+      "resources": ["assets/modal.css"],
+      "matches": ["<all_urls>"]
     }
   ]
 }

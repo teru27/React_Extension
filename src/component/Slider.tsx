@@ -8,27 +8,18 @@ interface SliderProps {
   step: number;
   value: number;
   setValue: React.Dispatch<React.SetStateAction<number>>;
+  label?: string;
 }
 
 export const Slider: FC<SliderProps> = (props) => {
-  const { min, max, step, value, setValue } = props;
+  const { min, max, step, value, setValue, label } = props;
 
   return (
     <div className="slider-main">
       <div className="slider-container">
-        <div className="slider-label">Volume: {value / 10}</div>
-        <button
-          className="slider-btn"
-          onClick={() => setValue((v) => Math.max(v - step * 5, 0))}
-        >
-          {"<<"}
-        </button>
-        <button
-          className="slider-btn"
-          onClick={() => setValue((v) => Math.max(v - step, 0))}
-        >
-          {"<"}
-        </button>
+        <div className="slider-label">
+          {label}: {value / 10}
+        </div>
         <input
           type="range"
           min={min}
@@ -38,18 +29,20 @@ export const Slider: FC<SliderProps> = (props) => {
           onChange={(e) => setValue(Number(e.target.value))}
           className="slider"
         />
-        <button
-          className="slider-btn"
-          onClick={() => setValue((v) => Math.min(v + step, 100))}
-        >
-          {">"}
-        </button>
-        <button
-          className="slider-btn"
-          onClick={() => setValue((v) => Math.min(v + step * 5, 100))}
-        >
-          {">>"}
-        </button>
+        <div className="slider-btn-group">
+          <button
+            className="slider-btn"
+            onClick={() => setValue((v) => Math.max(v - step, 0))}
+          >
+            {"<"}
+          </button>
+          <button
+            className="slider-btn"
+            onClick={() => setValue((v) => Math.min(v + step, 100))}
+          >
+            {">"}
+          </button>
+        </div>
       </div>
     </div>
   );

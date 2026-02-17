@@ -36,11 +36,13 @@ export const SelectModCmp: FC<SelectModCmpProps> = (props) => {
       <div className="select-mode">
         <select value={getSelectMode} onChange={(e) => changeMode(e)}>
           {modes.map((mode) => (
-            <option value={mode}>{mode}</option>
+            <option key={mode} value={mode}>
+              {mode}
+            </option>
           ))}
         </select>
       </div>
-      {getContent}
+      <div className="mode-content">{getContent}</div>
     </>
   );
 };

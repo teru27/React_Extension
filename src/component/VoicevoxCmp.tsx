@@ -1,15 +1,17 @@
 import { useEffect, useState, type FC } from "react";
 import { Accordion } from "./Accordion";
 import "./modal.css";
+import type { Speaker } from "./types";
 import { fetchAudioQuery, fetchSynthesis, getMainText } from "./util";
 
 interface voicevoxCmpType {}
 
-const SPEAKER_ID = 1; // 四国めたん（例）
-
 export const VoicevoxCmp: FC<voicevoxCmpType> = (props) => {
   const [textDoms, setTextDoms] = useState<HTMLParagraphElement[]>([]);
   const [loading, setLoading] = useState(false);
+  const [speakerId, setSpeakerId] = useState<number>(3);
+  const [speakerList, setSpeakerList] = useState<Speaker[]>([]);
+  const [selectChar, setSelectChar] = useState<string>("");
 
   const handleClick = () => {
     const textArr = getMainText();
@@ -33,12 +35,12 @@ export const VoicevoxCmp: FC<voicevoxCmpType> = (props) => {
       try {
         const queryRes = await fetchAudioQuery(
           textDoms[index]?.textContent,
-          SPEAKER_ID
+          speakerId,
         );
         if (!queryRes) return;
 
         const audioQuery = await queryRes.json();
-        const synthRes = await fetchSynthesis(audioQuery, SPEAKER_ID);
+        const synthRes = await fetchSynthesis(audioQuery, speakerId);
 
         const arrayBuffer = await synthRes.arrayBuffer();
         const blob = new Blob([arrayBuffer], { type: "audio/wav" });
@@ -65,18 +67,101 @@ export const VoicevoxCmp: FC<voicevoxCmpType> = (props) => {
     }
   }, [textDoms]);
 
+  // コンポーネント読み込み時にスピーカー一覧を取得
+  useEffect(() => {
+    // fetchSpeakers().then((data) => {
+    //   setSpeakerList(data);
+    // });
+
+    setSpeakerList([
+      {
+        name: "四国めたん",
+        speaker_uuid: "7df43e8a-b92a-44c5-ba90-6da93039988a",
+        styles: [
+          { name: "ノーマル", id: 2 },
+          { name: "あまあま", id: 0 },
+          { name: "ツンツン", id: 6 },
+          { name: "セクシー", id: 4 },
+          { name: "ささやき", id: 36 },
+          { name: "ヒソヒソ", id: 37 },
+        ],
+        version: "0.14.4",
+      },
+      {
+        name: "ずんだもん",
+        speaker_uuid: "388f246b-aba8-4d01-9061-277a9c21645a",
+        styles: [
+          { name: "ノーマル", id: 3 },
+          { name: "あまあま", id: 1 },
+          { name: "ツンツン", id: 7 },
+          { name: "セクシー", id: 5 },
+          { name: "ささやき", id: 22 },
+          { name: "ヒソヒソ", id: 38 },
+        ],
+        version: "0.14.4",
+      },
+    ]);
+  }, []);
+
+  // コンポーネント読み込み時にスピーカー一覧を取得
+  useEffect(() => {
+    if (speakerList.length > 0) {
+      console.log(speakerList[0].speaker_uuid);
+      setSelectChar(speakerList[0].speaker_uuid);
+    }
+  }, [speakerList]);
+
   return (
     <>
-      <div>
-        <strong>voicevoxCmpType</strong>
-      </div>
-      <button onClick={handleClick}>取得し再生</button>
+      <button className="btn-execute" onClick={handleClick}>
+        ▶ 取得して再生
+      </button>
 
-      <button onClick={playVoice} disabled={loading}>
+      <button
+        className="btn-secondary"
+        onClick={playVoice(0)}
+        disabled={loading}
+      >
         {loading ? "生成中…" : "再生"}
       </button>
       <Accordion>
-        <div>test</div>
+        <div className="setting-item">
+          <label className="slider-label">キャラクター選択</label>
+          <select
+            className="custom-select"
+            value={selectChar}
+            onChange={(e) => setSelectChar(e.target.value)}
+          >
+            {speakerList.map((speaker) => (
+              <option key={speaker.speaker_uuid} value={speaker.speaker_uuid}>
+                {speaker.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="setting-item">
+          <label className="slider-label">スタイル選択</label>
+          <select
+            className="custom-select"
+            value={speakerId}
+            onChange={(e) => setSpeakerId(Number(e.target.value))}
+          >
+            {speakerList
+              .filter((speaker) => speaker.speaker_uuid === selectChar)
+              .map((speaker) => (
+                <>
+                  {speaker.styles.map((style) => (
+                    <option
+                      key={speaker.speaker_uuid + style.id}
+                      value={style.id}
+                    >
+                      {style.name}
+                    </option>
+                  ))}
+                </>
+              ))}
+          </select>
+        </div>
       </Accordion>
     </>
   );
