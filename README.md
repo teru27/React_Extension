@@ -31,3 +31,20 @@ npm run build:all
 ## 作業内容の
 
 - https://copilot.microsoft.com/chats/CfGaRPQwwsuMpYKdgMp1T
+
+## VOICEVOXのローカル起動
+
+- sudo docker run -d -p 50021:50021 voicevox/voicevox_engine
+
+## VOICEVOXの停止方法
+
+- docker ps
+- docker stop CONTAINER ID
+
+## VOICEVOXのAPIの確認方法
+
+- http://localhost:50021/docs
+
+## VOICEVOX（GUI）のローカル実行のための環境構築方法
+
+- https://github.com/VOICEVOX/voicevox_engine#docker-%E3%82%A4%E3%83%A1%E3%83%BC%E3%82%B8

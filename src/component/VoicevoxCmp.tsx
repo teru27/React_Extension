@@ -2,7 +2,12 @@ import { useEffect, useState, type FC } from "react";
 import { Accordion } from "./Accordion";
 import "./modal.css";
 import type { Speaker } from "./types";
-import { fetchAudioQuery, fetchSynthesis, getMainText } from "./util";
+import {
+  fetchAudioQuery,
+  fetchSpeakers,
+  fetchSynthesis,
+  getMainText,
+} from "./util";
 
 interface voicevoxCmpType {}
 
@@ -69,38 +74,38 @@ export const VoicevoxCmp: FC<voicevoxCmpType> = (props) => {
 
   // コンポーネント読み込み時にスピーカー一覧を取得
   useEffect(() => {
-    // fetchSpeakers().then((data) => {
-    //   setSpeakerList(data);
-    // });
+    fetchSpeakers().then((data) => {
+      setSpeakerList(data);
+    });
 
-    setSpeakerList([
-      {
-        name: "四国めたん",
-        speaker_uuid: "7df43e8a-b92a-44c5-ba90-6da93039988a",
-        styles: [
-          { name: "ノーマル", id: 2 },
-          { name: "あまあま", id: 0 },
-          { name: "ツンツン", id: 6 },
-          { name: "セクシー", id: 4 },
-          { name: "ささやき", id: 36 },
-          { name: "ヒソヒソ", id: 37 },
-        ],
-        version: "0.14.4",
-      },
-      {
-        name: "ずんだもん",
-        speaker_uuid: "388f246b-aba8-4d01-9061-277a9c21645a",
-        styles: [
-          { name: "ノーマル", id: 3 },
-          { name: "あまあま", id: 1 },
-          { name: "ツンツン", id: 7 },
-          { name: "セクシー", id: 5 },
-          { name: "ささやき", id: 22 },
-          { name: "ヒソヒソ", id: 38 },
-        ],
-        version: "0.14.4",
-      },
-    ]);
+    // setSpeakerList([
+    //   {
+    //     name: "四国めたん",
+    //     speaker_uuid: "7df43e8a-b92a-44c5-ba90-6da93039988a",
+    //     styles: [
+    //       { name: "ノーマル", id: 2 },
+    //       { name: "あまあま", id: 0 },
+    //       { name: "ツンツン", id: 6 },
+    //       { name: "セクシー", id: 4 },
+    //       { name: "ささやき", id: 36 },
+    //       { name: "ヒソヒソ", id: 37 },
+    //     ],
+    //     version: "0.14.4",
+    //   },
+    //   {
+    //     name: "ずんだもん",
+    //     speaker_uuid: "388f246b-aba8-4d01-9061-277a9c21645a",
+    //     styles: [
+    //       { name: "ノーマル", id: 3 },
+    //       { name: "あまあま", id: 1 },
+    //       { name: "ツンツン", id: 7 },
+    //       { name: "セクシー", id: 5 },
+    //       { name: "ささやき", id: 22 },
+    //       { name: "ヒソヒソ", id: 38 },
+    //     ],
+    //     version: "0.14.4",
+    //   },
+    // ]);
   }, []);
 
   // コンポーネント読み込み時にスピーカー一覧を取得
