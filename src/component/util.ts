@@ -1,5 +1,3 @@
-import type { Speaker } from "./types";
-
 export function getMainText(): HTMLParagraphElement[] {
   if (!document.getElementsByClassName("p-novel__text")) return [];
 
@@ -8,46 +6,48 @@ export function getMainText(): HTMLParagraphElement[] {
   const textArr: HTMLParagraphElement[] = [];
   for (let i = 0; i < p_texts.length; i++) {
     const textDom = p_texts[i];
+    // 空行はスキップ
+    if (!textDom.textContent?.trim()) continue;
+
     textArr.push(textDom);
   }
   return textArr;
 }
 
-const VOICEVOX_URL = "http://127.0.0.1:50021";
-
-export const fetchSpeakers = async (): Promise<Speaker[]> => {
-  const res = await fetch(`${VOICEVOX_URL}/speakers`);
-  return res.json();
+export const fetchSpeakers = async () => {
+  return chrome.runtime.sendMessage({ type: "FETCH_SPEAKERS" });
 };
 
-export const fetchAudioQuery = async (
-  text: string,
-  SPEAKER_ID: number,
-): Promise<Response> => {
-  const queryRes = await fetch(
-    `${VOICEVOX_URL}/audio_query?text=${encodeURIComponent(
-      text,
-    )}&speaker=${SPEAKER_ID}`,
-    { method: "POST" },
-  );
-
-  return queryRes;
+export const fetchAudioQuery = async (text: string, speakerId: number) => {
+  return chrome.runtime.sendMessage({
+    type: "FETCH_AUDIO_QUERY",
+    payload: { text, speakerId },
+  });
 };
 
-export const fetchSynthesis = async (
-  audioQuery: any,
-  SPEAKER_ID: number,
-): Promise<Response> => {
-  const synthRes = await fetch(
-    `${VOICEVOX_URL}/synthesis?speaker=${SPEAKER_ID}`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(audioQuery),
-    },
-  );
+export const fetchSynthesis = async (audioQuery: any, speakerId: number) => {
+  return chrome.runtime.sendMessage({
+    type: "FETCH_SYNTHESIS",
+    payload: { audioQuery, speakerId },
+  });
+};
 
-  return synthRes;
+export const debugLog = (debugMode: boolean, ...args: any[]) => {
+  if (!debugMode) return;
+  console.log("[VOICEVOX]", ...args);
+};
+
+export const debugError = (debugMode: boolean, ...args: any[]) => {
+  if (!debugMode) return;
+  console.error("[VOICEVOX ERROR]", ...args);
+};
+
+export const debugGroup = (label: string, debugMode: boolean) => {
+  if (!debugMode) return;
+  console.group(label);
+};
+
+export const debugGroupEnd = (debugMode: boolean) => {
+  if (!debugMode) return;
+  console.groupEnd();
 };

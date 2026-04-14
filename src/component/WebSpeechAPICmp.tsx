@@ -5,7 +5,12 @@ import { getMainText } from "./util";
 
 const SCALE = 20;
 
-export const WebSpeechAPI: FC = () => {
+interface SelectModCmpProps {
+  mode: boolean;
+}
+
+export const WebSpeechAPI: FC<SelectModCmpProps> = (props) => {
+  const { mode } = props;
   const [getPitch, setPitch] = useState<number>(20);
   const [getSpeed, setSpeed] = useState<number>(20);
   const [getVolume, setVolume] = useState<number>(10);

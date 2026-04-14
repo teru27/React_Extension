@@ -9,7 +9,6 @@ interface ModalViewProps {
 
 export const ModalView: FC<ModalViewProps> = (props) => {
   const { setVisible } = props;
-
   return (
     <>
       <Modal setVisible={setVisible}>

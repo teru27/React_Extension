@@ -12,24 +12,36 @@ type mode = "web-api" | "voicevox";
 export const SelectModCmp: FC<SelectModCmpProps> = (props) => {
   const {} = props;
   const modes: mode[] = ["web-api", "voicevox"];
-  const [getSelectMode, setSelectMode] = useState<mode>("web-api");
+  const [getSelectMode, setSelectMode] = useState<mode>("voicevox");
 
   const changeMode = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectMode(e.target.value as mode);
   };
   const [getContent, setContent] = useState<JSX.Element>(<></>);
 
+  const [debugMode, setDebugMode] = useState(false);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("debugMode");
+    if (!saved) {
+      localStorage.setItem("debugMode", "0");
+    } else {
+      setDebugMode(saved === "1");
+      console.log("Debug Mode:", saved === "1" ? "ON" : "OFF");
+    }
+  }, [debugMode]);
+
   useEffect(() => {
     switch (getSelectMode) {
       case "voicevox":
-        setContent(<VoicevoxCmp />);
+        setContent(<VoicevoxCmp mode={debugMode} />);
         break;
       default:
       case "web-api":
-        setContent(<WebSpeechAPI />);
+        setContent(<WebSpeechAPI mode={debugMode} />);
         break;
     }
-  }, [getSelectMode]); // ← 依存配列にモードを入れる
+  }, [getSelectMode, debugMode]); // ← 依存配列にモードを入れる
 
   return (
     <>
